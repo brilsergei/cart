@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\LineItem;
 use App\Form\CreateLineItemType;
 use App\Repository\CartRepository;
+use App\Repository\LineItemRepository;
 use Doctrine\ORM\ORMException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,14 +17,14 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @package App\Controller
  *
- * @Route("/api/v1/cart/{cart_id}")
+ * @Route("/api/v1/cart/{cartId}")
  */
 class LineItemController extends ApiController {
 
     /**
      * @Route("/line-items", name="add_to_cart", methods={"POST"})
      */
-    public function create($cart_id, Request $request, CartRepository $cartRepository)
+    public function create($cartId, Request $request, CartRepository $cartRepository)
     {
         // TODO Better throw exceptions in order to avoid code duplication (see method update)
         try {
@@ -38,7 +39,7 @@ class LineItemController extends ApiController {
         $form->submit($data);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $cart = $cartRepository->find($cart_id);
+            $cart = $cartRepository->find($cartId);
             $lineItem->setCart($cart);
             $entityManager = $this->getDoctrine()
                 ->getManager();
@@ -56,6 +57,32 @@ class LineItemController extends ApiController {
         }
 
         return $this->handleFormErrors($form);
+    }
+
+    /**
+     * @Route("/line-items/{lineItemId}", name="remove_from_cart", methods={"DELETE"})
+     */
+    public function delete($lineItemId, LineItemRepository $lineItemRepository)
+    {
+        $lineItem = $lineItemRepository->find($lineItemId);
+        if (!$lineItem instanceof LineItem) {
+            return new Response('', Response::HTTP_NOT_FOUND);
+        }
+
+        $entityManager = $this->getDoctrine()
+            ->getManager();
+        $entityManager->remove($lineItem);
+
+        try
+        {
+            $entityManager->flush();
+        } catch (ORMException $exception)
+        {
+            $result = ['errors' => ['Unable to delete the line item.']];
+            return $this->json($result, Response::HTTP_INSUFFICIENT_STORAGE);
+        }
+
+        return new Response('', Response::HTTP_NO_CONTENT);
     }
 
 }

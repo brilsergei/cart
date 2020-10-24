@@ -7,3 +7,8 @@ Content-Type: application/json
 }
 
 ###
+
+DELETE {{base_url}}/cart/2/line-items/1
+Content-Type: application/json
+
+###
