@@ -56,6 +56,19 @@ class ProductController extends ApiController
     }
 
     /**
+     * @Route("/product/{id}", name="show_product", methods={"GET"})
+     */
+    public function show($id, ProductRepository $productRepository)
+    {
+        $product = $productRepository->find($id);
+        if ($product instanceof Product) {
+            return $this->json($product);
+        }
+
+        return new Response('', Response::HTTP_NOT_FOUND);
+    }
+
+    /**
      * @Route("/product/{id}", name="delete_product", methods={"DELETE"})
      */
     public function delete($id, ProductRepository $productRepository)
