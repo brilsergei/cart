@@ -10,3 +10,8 @@ Content-Type: application/json
 }
 
 ###
+
+DELETE {{base_url}}/product/10
+Content-Type: application/json
+
+###

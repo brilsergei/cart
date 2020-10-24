@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Product;
 use App\Form\CreateProductType;
+use App\Repository\ProductRepository;
 use Doctrine\ORM\ORMException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -52,5 +53,27 @@ class ProductController extends ApiController
         }
 
         return $this->handleFormErrors($form);
+    }
+
+    /**
+     * @Route("/product/{id}", name="delete_product", methods={"DELETE"})
+     */
+    public function delete($id, ProductRepository $productRepository)
+    {
+        $product = $productRepository->find($id);
+        $entityManager = $this->getDoctrine()
+            ->getManager();
+        $entityManager->remove($product);
+
+        try
+        {
+            $entityManager->flush();
+        } catch (ORMException $exception)
+        {
+            $result = ['errors' => ['Unable to delete the product.']];
+            return $this->json($result, Response::HTTP_INSUFFICIENT_STORAGE);
+        }
+
+        return new Response('', Response::HTTP_NO_CONTENT);
     }
 }
