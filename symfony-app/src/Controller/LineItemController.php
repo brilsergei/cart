@@ -85,4 +85,14 @@ class LineItemController extends ApiController {
         return new Response('', Response::HTTP_NO_CONTENT);
     }
 
+    /**
+     * @Route("/line-items", name="list_cart_products", methods={"GET"})
+     */
+    public function list($cartId, Request $request, LineItemRepository $lineItemRepository)
+    {
+        $lineItems = $lineItemRepository->findByCart($cartId);
+
+        return $this->json($lineItems, Response::HTTP_OK);
+    }
+
 }

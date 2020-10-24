@@ -19,22 +19,19 @@ class LineItemRepository extends ServiceEntityRepository
         parent::__construct($registry, LineItem::class);
     }
 
-    // /**
-    //  * @return LineItem[] Returns an array of LineItem objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @return LineItem[] Returns an array of LineItem objects
+     */
+    public function findByCart($value)
     {
         return $this->createQueryBuilder('l')
-            ->andWhere('l.exampleField = :val')
+            ->andWhere('l.cart = :val')
             ->setParameter('val', $value)
             ->orderBy('l.id', 'ASC')
-            ->setMaxResults(10)
             ->getQuery()
             ->getResult()
         ;
     }
-    */
 
     /*
     public function findOneBySomeField($value): ?LineItem
