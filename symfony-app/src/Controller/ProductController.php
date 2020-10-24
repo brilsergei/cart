@@ -21,6 +21,8 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ProductController extends ApiController
 {
+    private const MAX_PRODUCTS_PER_PAGE = 3;
+
     /**
      * @Route("/product", name="create_product", methods={"POST"})
      */
@@ -135,5 +137,21 @@ class ProductController extends ApiController
         }
 
         return $this->handleFormErrors($form);
+    }
+
+    /**
+     * @Route("/product", name="list_products", methods={"GET"})
+     */
+    public function list(Request $request, ProductRepository $productRepository)
+    {
+        $page = $request->get('page') ?? 0;
+        $products = $productRepository->findBy(
+            [],
+            ['id' => 'asc'],
+            static::MAX_PRODUCTS_PER_PAGE,
+            static::MAX_PRODUCTS_PER_PAGE * $page
+        );
+
+        return $this->json($products, Response::HTTP_OK);
     }
 }

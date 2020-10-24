@@ -33,3 +33,8 @@ Content-Type: application/json
 }
 
 ###
+
+GET {{base_url}}/product?page=1
+Content-Type: application/json
+
+###
