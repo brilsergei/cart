@@ -4,10 +4,13 @@ namespace App\Entity;
 
 use App\Repository\ProductRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=ProductRepository::class)
  * @ORM\Table(name="product", uniqueConstraints={@ORM\UniqueConstraint(name="title_unique",columns={"title"})})
+ * @UniqueEntity("title", message="Product with such title already exists.")
  */
 class Product
 {
@@ -20,12 +23,15 @@ class Product
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Title can't be empty.", groups={"creation"})
      */
     private $title;
 
     /**
      * @ORM\OneToOne(targetEntity=ProductPrice::class, cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
+     * @Assert\NotNull(message="Product has to have a price.", groups={"creation"})
+     * @Assert\Valid()
      */
     private $price;
 

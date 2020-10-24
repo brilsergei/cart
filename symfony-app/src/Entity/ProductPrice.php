@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\ProductPriceRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=ProductPriceRepository::class)
@@ -19,11 +20,13 @@ class ProductPrice
 
     /**
      * @ORM\Column(type="float")
+     * @Assert\NotBlank(message="Amount field can't be empty.", groups={"creation"})
      */
     private $amount;
 
     /**
      * @ORM\Column(type="string", length=3)
+     * @Assert\NotBlank(message="Currency field can't be empty.", groups={"creation"})
      */
     private $currency;
 
