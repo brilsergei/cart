@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Cart;
 use App\Repository\CartRepository;
+use App\Service\CartManager;
 use Doctrine\ORM\ORMException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -43,11 +44,16 @@ class CartController extends ApiController {
     /**
      * @Route("/carts/{cartId}", name="show_cart", methods={"GET"})
      */
-    public function show($cartId, CartRepository $cartRepository)
+    public function show($cartId, CartRepository $cartRepository, CartManager $cartManager, $defaultCurrency)
     {
         $cart = $cartRepository->find($cartId);
         if ($cart instanceof Cart) {
-            return $this->json($cart);
+            $result = $cart->jsonSerialize();
+            $result['total_price'] = [
+                'amount' => $cartManager->calculateTotalPrice($cart),
+                'currency' => $defaultCurrency,
+            ];
+            return $this->json($result);
         }
 
         return new Response('', Response::HTTP_NOT_FOUND);
