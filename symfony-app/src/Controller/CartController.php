@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Cart;
+use App\Repository\CartRepository;
 use Doctrine\ORM\ORMException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,6 +38,19 @@ class CartController extends ApiController {
         }
 
         return $this->json($cart, Response::HTTP_CREATED);
+    }
+
+    /**
+     * @Route("/carts/{cartId}", name="show_cart", methods={"GET"})
+     */
+    public function show($cartId, CartRepository $cartRepository)
+    {
+        $cart = $cartRepository->find($cartId);
+        if ($cart instanceof Cart) {
+            return $this->json($cart);
+        }
+
+        return new Response('', Response::HTTP_NOT_FOUND);
     }
 
 }

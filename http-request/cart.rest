@@ -2,3 +2,6 @@ POST {{base_url}}/carts
 Content-Type: application/json
 
 ###
+
+GET {{base_url}}/carts/2
+Content-Type: application/json

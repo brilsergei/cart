@@ -68,6 +68,7 @@ class Cart implements \JsonSerializable
     public function jsonSerialize() {
         return [
             'id' => $this->getId(),
+            'line_items' => $this->getLineItems()->toArray(),
         ];
     }
 
