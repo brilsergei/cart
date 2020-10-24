@@ -20,3 +20,16 @@ GET {{base_url}}/product/10
 Content-Type: application/json
 
 ###
+
+PATCH {{base_url}}/product/9
+Content-Type: application/json
+
+{
+  "title": "Super game 2",
+  "price": {
+    "amount": 12,
+    "currency": "EUR"
+  }
+}
+
+###

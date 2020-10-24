@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Product;
 use App\Form\CreateProductType;
+use App\Form\ProductType;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\ORMException;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,6 +26,7 @@ class ProductController extends ApiController
      */
     public function create(Request $request)
     {
+        // TODO Better throw exceptions in order to avoid code duplication (see method update)
         try {
             $data = $this->getJson($request);
         }
@@ -74,6 +76,10 @@ class ProductController extends ApiController
     public function delete($id, ProductRepository $productRepository)
     {
         $product = $productRepository->find($id);
+        if (!$product instanceof Product) {
+            return new Response('', Response::HTTP_NOT_FOUND);
+        }
+
         $entityManager = $this->getDoctrine()
             ->getManager();
         $entityManager->remove($product);
@@ -88,5 +94,46 @@ class ProductController extends ApiController
         }
 
         return new Response('', Response::HTTP_NO_CONTENT);
+    }
+
+    /**
+     * @Route("/product/{id}", name="update_product", methods={"PATCH"})
+     */
+    public function update($id, ProductRepository $productRepository, Request $request)
+    {
+        // TODO Better throw exceptions in order to avoid code duplication (see method create)
+        try {
+            $data = $this->getJson($request);
+        }
+        catch (HttpException $exception) {
+            $result = ['errors' => [$exception->getMessage()]];
+            return $this->json($result, $exception->getStatusCode());
+        }
+
+        $product = $productRepository->find($id);
+        if (!$product instanceof Product) {
+            return new Response('', Response::HTTP_NOT_FOUND);
+        }
+
+        $form = $this->createForm(ProductType::class, $product);
+        $form->submit($data);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->getDoctrine()
+                ->getManager();
+            $entityManager->persist($product);
+            try
+            {
+                $entityManager->flush();
+            } catch (ORMException $exception)
+            {
+                $result = ['errors' => ['Unable to update the product.']];
+                return $this->json($result, Response::HTTP_INSUFFICIENT_STORAGE);
+            }
+
+            return $this->json($product, Response::HTTP_OK);
+        }
+
+        return $this->handleFormErrors($form);
     }
 }
