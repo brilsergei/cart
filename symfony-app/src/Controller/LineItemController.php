@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\LineItem;
 use App\Form\CreateLineItemType;
-use App\Repository\CartRepository;
 use App\Repository\LineItemRepository;
 use Doctrine\ORM\ORMException;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,7 +23,7 @@ class LineItemController extends ApiController {
     /**
      * @Route("/line-items", name="add_to_cart", methods={"POST"})
      */
-    public function create($cartId, Request $request, CartRepository $cartRepository)
+    public function create($cartId, Request $request)
     {
         // TODO Better throw exceptions in order to avoid code duplication (see method update)
         try {
@@ -34,13 +33,13 @@ class LineItemController extends ApiController {
             $result = ['errors' => [$exception->getMessage()]];
             return $this->json($result, $exception->getStatusCode());
         }
+        $data['cart'] = $cartId;
+
         $lineItem = new LineItem();
         $form = $this->createForm(CreateLineItemType::class, $lineItem);
         $form->submit($data);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $cart = $cartRepository->find($cartId);
-            $lineItem->setCart($cart);
             $entityManager = $this->getDoctrine()
                 ->getManager();
             $entityManager->persist($lineItem);

@@ -3,12 +3,13 @@
 namespace App\Entity;
 
 use App\Repository\LineItemRepository;
+use App\Validator as AppAssert;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=LineItemRepository::class)
+ * @AppAssert\NumberOfLineItemsPerCart(max=3)
  * // TODO Create unique line item constraint
  */
 class LineItem implements \JsonSerializable

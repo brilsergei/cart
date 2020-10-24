@@ -13,6 +13,7 @@ class CreateLineItemType extends LineItemType {
 
         $builder
             ->add('product')
+            ->add('cart')
         ;
     }
 
