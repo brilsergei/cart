@@ -4,9 +4,12 @@ namespace App\Entity;
 
 use App\Repository\LineItemRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=LineItemRepository::class)
+ * // TODO Create unique line item constraint
  */
 class LineItem implements \JsonSerializable
 {
@@ -19,12 +22,16 @@ class LineItem implements \JsonSerializable
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\GreaterThan(0, message="Line item should have at least one unit of product.")
+     * @Assert\LessThanOrEqual(10, message="Line item can't have more than 10 units of product.")
+     * @Assert\NotBlank(groups={"creation"}, message="Number of products on the line item has to be specified.")
      */
     private $quantity;
 
     /**
      * @ORM\ManyToOne(targetEntity=Product::class)
      * @ORM\JoinColumn(nullable=false)
+     * @Assert\NotNull(message="You should provide a product for a new line item.", groups={"creation"})
      */
     private $product;
 

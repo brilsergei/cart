@@ -1,0 +1,9 @@
+POST {{base_url}}/cart/2/line-items
+Content-Type: application/json
+
+{
+  "product": 9,
+  "quantity": 3
+}
+
+###
