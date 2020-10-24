@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass=ProductPriceRepository::class)
  */
-class ProductPrice
+class ProductPrice implements \JsonSerializable
 {
     /**
      * @ORM\Id
@@ -58,4 +58,15 @@ class ProductPrice
 
         return $this;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function jsonSerialize() {
+        return [
+            'amount' => $this->getAmount(),
+            'currency' => $this->getCurrency(),
+        ];
+    }
+
 }

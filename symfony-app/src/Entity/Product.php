@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="product", uniqueConstraints={@ORM\UniqueConstraint(name="title_unique",columns={"title"})})
  * @UniqueEntity("title", message="Product with such title already exists.")
  */
-class Product
+class Product implements \JsonSerializable
 {
     /**
      * @ORM\Id
@@ -63,4 +63,13 @@ class Product
 
         return $this;
     }
+
+    public function jsonSerialize() {
+        return [
+            'id' => $this->getId(),
+            'title' => $this->getTitle(),
+            'price' => $this->getPrice(),
+        ];
+    }
+
 }
