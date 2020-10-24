@@ -24,7 +24,7 @@ class ProductController extends ApiController
     private const MAX_PRODUCTS_PER_PAGE = 3;
 
     /**
-     * @Route("/product", name="create_product", methods={"POST"})
+     * @Route("/products", name="create_product", methods={"POST"})
      */
     public function create(Request $request)
     {
@@ -60,7 +60,7 @@ class ProductController extends ApiController
     }
 
     /**
-     * @Route("/product/{id}", name="show_product", methods={"GET"})
+     * @Route("/products/{id}", name="show_product", methods={"GET"})
      */
     public function show($id, ProductRepository $productRepository)
     {
@@ -73,7 +73,7 @@ class ProductController extends ApiController
     }
 
     /**
-     * @Route("/product/{id}", name="delete_product", methods={"DELETE"})
+     * @Route("/products/{id}", name="delete_product", methods={"DELETE"})
      */
     public function delete($id, ProductRepository $productRepository)
     {
@@ -99,7 +99,7 @@ class ProductController extends ApiController
     }
 
     /**
-     * @Route("/product/{id}", name="update_product", methods={"PATCH"})
+     * @Route("/products/{id}", name="update_product", methods={"PATCH"})
      */
     public function update($id, ProductRepository $productRepository, Request $request)
     {
@@ -140,7 +140,7 @@ class ProductController extends ApiController
     }
 
     /**
-     * @Route("/product", name="list_products", methods={"GET"})
+     * @Route("/products", name="list_products", methods={"GET"})
      */
     public function list(Request $request, ProductRepository $productRepository)
     {
