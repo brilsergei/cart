@@ -1,0 +1,12 @@
+POST {{base_url}}/product
+Content-Type: application/json
+
+{
+  "title": "Super game",
+  "price": {
+    "amount": 12.3,
+    "currency": "USD"
+  }
+}
+
+###
