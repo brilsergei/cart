@@ -17,6 +17,5 @@ A couple of notes for reviewer
 2. There is an ability to add a few line items referencing same cart and product
 3. All endpoints has to be covered with functional tests. I would use liip/functional-test-bundle and
   liip/test-fixtures-bundle (and even used it for an app based on symfony to test API endpoints). This libraries
-  provides useful wrapper for symfony's functional tests base and ability to use real database connection and fixtures
-  in tests.
+  provide useful wrapper for symfony's functional tests base and ability to use real database connection and fixtures in tests.
 4. All 3 above issues wasn't fixed due to limited time I could dedicate for the task (about 15 hours in total)
